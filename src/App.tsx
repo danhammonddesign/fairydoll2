@@ -166,15 +166,24 @@ export default function App() {
           ))}
         </div>
 
-        <button
-          onClick={save}
-          aria-label="Save a picture of your doll"
-          className="tap absolute top-3 right-3 z-10 grid h-12 w-12 place-items-center rounded-full bg-white/90 text-xl shadow-lg ring-2 ring-pink-200"
-        >
-          💾
-        </button>
+        <div className="absolute top-3 right-3 z-10 flex gap-2">
+          <button
+            onClick={surprise}
+            aria-label="Surprise me with a random outfit"
+            className="tap grid h-12 w-12 place-items-center rounded-full bg-white/90 text-xl shadow-lg ring-2 ring-pink-200"
+          >
+            🎲
+          </button>
+          <button
+            onClick={save}
+            aria-label="Save a picture of your doll"
+            className="tap grid h-12 w-12 place-items-center rounded-full bg-white/90 text-xl shadow-lg ring-2 ring-pink-200"
+          >
+            💾
+          </button>
+        </div>
 
-        <DollSvg ref={stageRef} outfit={outfit} className="h-full w-full max-h-full pt-4 pb-20 md:pt-8 md:pb-24 drop-shadow-xl" />
+        <DollSvg ref={stageRef} outfit={outfit} className="h-full w-full max-h-full p-3 md:p-6 drop-shadow-xl" />
 
         {cheer && (
           <div className="pop absolute top-1/4 left-1/2 -translate-x-1/2 z-20 rounded-full bg-white/95 px-6 py-2 text-xl font-extrabold text-pink-500 shadow-lg ring-2 ring-pink-200">
@@ -182,12 +191,6 @@ export default function App() {
           </div>
         )}
 
-        <button
-          onClick={surprise}
-          className="tap absolute bottom-3 left-1/2 -translate-x-1/2 z-10 flex items-center gap-2 rounded-full bg-white px-6 py-3 text-base font-extrabold text-pink-500 shadow-lg ring-4 ring-pink-200"
-        >
-          <span className="text-xl">🎲</span> Surprise!
-        </button>
       </main>
 
       {/* ----------------------------------------------------------------- tray */}
@@ -246,7 +249,7 @@ export default function App() {
         </div>
 
         {/* colours */}
-        {canPaint ? (
+        {canPaint && (
           <div className="no-bar flex h-11 items-center gap-2 overflow-x-auto">
             <span className="shrink-0 text-lg" aria-hidden>
               🎨
@@ -262,10 +265,6 @@ export default function App() {
                 style={{ backgroundColor: c }}
               />
             ))}
-          </div>
-        ) : (
-          <div className="flex h-11 items-center justify-center rounded-2xl bg-pink-50 text-sm font-bold text-pink-400">
-            {active === 'doll' ? 'Pick your doll, then dress her up! 💕' : 'Pick something to colour it in! 🎨'}
           </div>
         )}
       </section>
