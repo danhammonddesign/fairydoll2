@@ -6,6 +6,9 @@ import {defineConfig, loadEnv} from 'vite';
 export default defineConfig(({mode}) => {
   const env = loadEnv(mode, '.', '');
   return {
+    // GitHub Pages serves the site from /<repo>/, so asset URLs need that
+    // prefix. Everywhere else (local dev, AI Studio) stays at the root.
+    base: process.env.GITHUB_PAGES ? '/fairydoll2/' : '/',
     plugins: [react(), tailwindcss()],
     define: {
       'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY),

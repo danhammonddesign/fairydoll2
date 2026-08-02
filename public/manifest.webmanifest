@@ -1,0 +1,19 @@
+{
+  "name": "Dress-Up Dolls",
+  "short_name": "Dolls",
+  "description": "Pick a doll, then mix and match hats, dresses, shirts, pants, shoes, accessories and makeup.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#FFEAF4",
+  "theme_color": "#FFEAF4",
+  "icons": [
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

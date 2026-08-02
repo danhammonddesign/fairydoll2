@@ -66,30 +66,46 @@ export default function App() {
     clone.setAttribute('width', '900');
     clone.setAttribute('height', '1410');
     const source = new XMLSerializer().serializeToString(clone);
-    const url = URL.createObjectURL(new Blob([source], { type: 'image/svg+xml;charset=utf-8' }));
 
-    const img = new Image();
-    img.onload = () => {
-      const canvas = document.createElement('canvas');
-      canvas.width = 900;
-      canvas.height = 1410;
-      const c = canvas.getContext('2d');
-      if (!c) return;
-      c.fillStyle = '#FFEAF4';
-      c.fillRect(0, 0, canvas.width, canvas.height);
-      c.drawImage(img, 0, 0, canvas.width, canvas.height);
-      URL.revokeObjectURL(url);
-      canvas.toBlob((blob) => {
-        if (!blob) return;
-        const link = document.createElement('a');
-        link.href = URL.createObjectURL(blob);
-        link.download = `${doll.name}-dressup.png`;
-        link.click();
-        URL.revokeObjectURL(link.href);
-        flash('Saved! 💾');
-      });
+    // Some hosts block blob: in img-src, others block data:. Try both.
+    const sources = [
+      `data:image/svg+xml;charset=utf-8,${encodeURIComponent(source)}`,
+      URL.createObjectURL(new Blob([source], { type: 'image/svg+xml;charset=utf-8' })),
+    ];
+
+    const attempt = (i: number) => {
+      if (i >= sources.length) {
+        flash('Could not save 😢');
+        return;
+      }
+      const img = new Image();
+      img.onerror = () => attempt(i + 1);
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = 900;
+        canvas.height = 1410;
+        const c = canvas.getContext('2d');
+        if (!c) return;
+        c.fillStyle = '#FFEAF4';
+        c.fillRect(0, 0, canvas.width, canvas.height);
+        c.drawImage(img, 0, 0, canvas.width, canvas.height);
+        canvas.toBlob((blob) => {
+          if (!blob) {
+            attempt(i + 1);
+            return;
+          }
+          const link = document.createElement('a');
+          link.href = URL.createObjectURL(blob);
+          link.download = `${doll.name}-dressup.png`;
+          link.click();
+          URL.revokeObjectURL(link.href);
+          flash('Saved! 💾');
+        });
+      };
+      img.src = sources[i];
     };
-    img.src = url;
+
+    attempt(0);
   }
 
   const selectedId = outfit[active as OutfitKey];
