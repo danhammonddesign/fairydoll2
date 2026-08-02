@@ -166,11 +166,15 @@ export default function App() {
           ))}
         </div>
 
-        <h1 className="absolute top-3 left-1/2 -translate-x-1/2 md:left-5 md:translate-x-0 z-10 whitespace-nowrap rounded-full bg-white/85 px-4 py-1.5 text-base md:text-xl font-extrabold text-pink-500 shadow-md ring-2 ring-white">
-          ✨ Dress-Up Dolls ✨
-        </h1>
+        <button
+          onClick={save}
+          aria-label="Save a picture of your doll"
+          className="tap absolute top-3 right-3 z-10 grid h-12 w-12 place-items-center rounded-full bg-white/90 text-xl shadow-lg ring-2 ring-pink-200"
+        >
+          💾
+        </button>
 
-        <DollSvg ref={stageRef} outfit={outfit} className="h-full w-full max-h-full pt-10 pb-20 md:pt-14 md:pb-24 drop-shadow-xl" />
+        <DollSvg ref={stageRef} outfit={outfit} className="h-full w-full max-h-full pt-4 pb-20 md:pt-8 md:pb-24 drop-shadow-xl" />
 
         {cheer && (
           <div className="pop absolute top-1/4 left-1/2 -translate-x-1/2 z-20 rounded-full bg-white/95 px-6 py-2 text-xl font-extrabold text-pink-500 shadow-lg ring-2 ring-pink-200">
@@ -178,33 +182,29 @@ export default function App() {
           </div>
         )}
 
-        <div className="absolute bottom-3 left-1/2 -translate-x-1/2 z-10 flex gap-3">
-          <button
-            onClick={surprise}
-            className="tap flex items-center gap-2 rounded-full bg-white px-5 py-3 text-base font-extrabold text-pink-500 shadow-lg ring-4 ring-pink-200"
-          >
-            <span className="text-xl">🎲</span> Surprise!
-          </button>
-          <button
-            onClick={save}
-            className="tap flex items-center gap-2 rounded-full bg-pink-400 px-5 py-3 text-base font-extrabold text-white shadow-lg ring-4 ring-pink-200"
-          >
-            <span className="text-xl">💾</span> Save
-          </button>
-        </div>
+        <button
+          onClick={surprise}
+          className="tap absolute bottom-3 left-1/2 -translate-x-1/2 z-10 flex items-center gap-2 rounded-full bg-white px-6 py-3 text-base font-extrabold text-pink-500 shadow-lg ring-4 ring-pink-200"
+        >
+          <span className="text-xl">🎲</span> Surprise!
+        </button>
       </main>
 
       {/* ----------------------------------------------------------------- tray */}
       <section className="shrink-0 md:w-[440px] md:h-full bg-white/95 shadow-[0_-8px_24px_rgba(255,150,190,0.25)] md:shadow-[-8px_0_24px_rgba(255,150,190,0.2)] flex flex-col gap-2 p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
         {/* categories */}
-        <div className="grid grid-cols-4 gap-2">
+        <div className="no-bar flex gap-2 overflow-x-auto md:grid md:grid-cols-4 md:overflow-visible">
           {CATEGORIES.map((c) => {
             const on = c.id === active;
             return (
               <button
                 key={c.id}
-                onClick={() => setActive(c.id)}
-                className={`tap flex flex-col items-center justify-center rounded-2xl px-2 py-1.5 transition-colors ${
+                onClick={(e) => {
+                  setActive(c.id);
+                  // Swiped-past tabs pull themselves back into view when tapped.
+                  e.currentTarget.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+                }}
+                className={`tap flex w-[72px] shrink-0 flex-col items-center justify-center rounded-2xl px-2 py-1.5 transition-colors md:w-auto ${
                   on ? 'bg-pink-400 text-white shadow-md' : 'bg-pink-50 text-pink-400'
                 }`}
               >
