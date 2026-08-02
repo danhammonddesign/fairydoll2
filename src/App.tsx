@@ -1,6 +1,6 @@
 import { useMemo, useRef, useState } from 'react';
 import { DollSvg } from './components/DollSvg';
-import { CATEGORIES, DEFAULT_OUTFIT, DOLLS, randomOutfit } from './data';
+import { CATEGORIES, DEFAULT_OUTFIT, DOLLS, randomOutfit, themeOf } from './data';
 import { PALETTE } from './art/palette';
 import type { CategoryId, Item, Outfit } from './types';
 
@@ -235,6 +235,14 @@ export default function App() {
                 }`}
               >
                 <DollSvg outfit={previewFor(item)} viewBox={category.thumb} className="h-[74px] w-full md:h-[92px]" />
+                {themeOf(item.theme) && (
+                  <span
+                    className="absolute -top-1.5 -left-1.5 grid h-6 w-6 place-items-center rounded-full bg-white text-xs shadow ring-1 ring-pink-100"
+                    title={themeOf(item.theme)!.name}
+                  >
+                    {themeOf(item.theme)!.emoji}
+                  </span>
+                )}
                 <span className="block truncate rounded-b-xl bg-white/70 text-[10px] font-bold text-pink-500">
                   {item.name}
                 </span>

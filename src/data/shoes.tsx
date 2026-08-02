@@ -1,217 +1,200 @@
-import type { ReactNode } from 'react';
+import { Boot, FLAT, S, SHOE, SOLE, pair, shaft } from '../art/garments';
+import { Motif } from '../art/motifs';
 import { OUTLINE, shade } from '../art/palette';
-import { heartPath, starPoints } from '../art/shapes';
+import { bolt, paw, shell, starPoints } from '../art/shapes';
 import type { Item } from '../types';
-
-const S = { stroke: OUTLINE, strokeWidth: 5, strokeLinejoin: 'round' as const };
-
-/** Shoes are drawn once for the left foot, then mirrored across the doll. */
-function pair(art: ReactNode): ReactNode {
-  return (
-    <g>
-      {art}
-      <g transform="translate(300 0) scale(-1 1)">{art}</g>
-    </g>
-  );
-}
-
-const SHOE = 'M 108 388 C 96 394 96 412 110 418 L 142 418 C 148 412 148 392 142 388 Z';
-const SOLE = 'M 106 408 C 96 410 98 418 110 420 L 142 420 C 148 418 148 410 142 408 Z';
+import { PRINCESSES, RAINBOW_BANDS } from './themes';
 
 export const SHOES: Item[] = [
   { id: 'none', name: 'Bare Feet', color: '#FFB3CB' },
 
   {
-    id: 'sneakers',
-    name: 'Sneakers',
-    color: '#FF5C8A',
+    id: 'witch',
+    name: 'Witch Boots',
+    theme: 'witch',
+    color: '#7C5CD6',
     draw: ({ color }) =>
       pair(
         <g>
-          <path d={SHOE} fill={color} {...S} />
-          <path d={SOLE} fill="#FFFFFF" {...S} />
-          <path d="M 116 394 l 20 6 M 116 402 l 20 6" stroke="#FFFFFF" strokeWidth={4.5} strokeLinecap="round" />
+          <path d={shaft(336)} fill={color} {...S} />
+          {/* curled pointed toe */}
+          <path d="M 108 388 C 92 394 88 412 104 418 L 142 418 C 148 412 148 392 142 388 Z" fill={color} {...S} />
+          <path d="M 96 414 C 82 412 82 398 92 396 C 88 404 90 410 100 410 Z" fill={color} {...S} strokeWidth={4} />
+          <path d={SOLE} fill={shade(color, -28)} {...S} />
+          <rect x={112} y={352} width={32} height={13} rx={3} fill="#FFD166" stroke={OUTLINE} strokeWidth={3.5} />
+          <polygon points={starPoints(128, 344, 9)} fill="#FFF0A8" stroke={OUTLINE} strokeWidth={2.6} />
         </g>,
       ),
   },
 
   {
-    id: 'flats',
-    name: 'Ballet Flats',
-    color: '#FF9FC4',
-    draw: ({ color }) =>
-      pair(
-        <g>
-          <path d="M 106 396 C 96 400 96 414 110 418 L 142 418 C 148 414 148 398 142 396 Z" fill={color} {...S} />
-          <path d="M 124 396 C 116 390 110 396 116 400 C 121 402 124 399 126 397 Z" fill={shade(color, -14)} {...S} strokeWidth={3} />
-          <path d="M 128 396 C 136 390 142 396 136 400 C 131 402 128 399 126 397 Z" fill={shade(color, -14)} {...S} strokeWidth={3} />
-          <circle cx={126} cy={397} r={3.5} fill={shade(color, -14)} stroke={OUTLINE} strokeWidth={2.5} />
-        </g>,
-      ),
-  },
-
-  {
-    id: 'maryjanes',
-    name: 'Mary Janes',
-    color: '#6B5B73',
-    draw: ({ color }) =>
-      pair(
-        <g>
-          <path d="M 106 396 C 96 400 96 414 110 418 L 142 418 C 148 414 148 398 142 396 Z" fill={color} {...S} />
-          <path d="M 110 396 L 142 396" stroke={shade(color, 25)} strokeWidth={6} strokeLinecap="round" />
-          <circle cx={140} cy={396} r={5} fill="#FFF0A8" stroke={OUTLINE} strokeWidth={3} />
-        </g>,
-      ),
-  },
-
-  {
-    id: 'boots',
-    name: 'Boots',
-    color: '#B98CFF',
-    draw: ({ color }) =>
-      pair(
-        <g>
-          <path d="M 110 344 L 146 344 L 146 396 L 110 396 Z" fill={color} {...S} />
-          <path d={SHOE} fill={color} {...S} />
-          <path d={SOLE} fill={shade(color, -25)} {...S} />
-          <path d="M 110 352 L 146 352" stroke={shade(color, -18)} strokeWidth={5} />
-        </g>,
-      ),
-  },
-
-  {
-    id: 'starboots',
-    name: 'Star Boots',
-    color: '#7C8CF8',
-    draw: ({ color }) =>
-      pair(
-        <g>
-          <path d="M 110 340 L 146 340 L 146 396 L 110 396 Z" fill={color} {...S} />
-          <path d={SHOE} fill={color} {...S} />
-          <path d={SOLE} fill="#FFFFFF" {...S} />
-          <polygon points={starPoints(128, 364, 15)} fill="#FFD166" stroke={OUTLINE} strokeWidth={3.5} />
-        </g>,
-      ),
-  },
-
-  {
-    id: 'rainboots',
-    name: 'Rain Boots',
-    color: '#FFD166',
-    draw: ({ color }) =>
-      pair(
-        <g>
-          <path d="M 108 316 L 148 316 L 148 396 L 108 396 Z" fill={color} {...S} />
-          <path d={SHOE} fill={color} {...S} />
-          <path d={SOLE} fill={shade(color, -30)} {...S} />
-          <path d="M 108 328 L 148 328" stroke={shade(color, -20)} strokeWidth={6} />
-          <circle cx={128} cy={356} r={8} fill="#FFFFFF" stroke={OUTLINE} strokeWidth={3.5} />
-        </g>,
-      ),
-  },
-
-  {
-    id: 'winterboots',
-    name: 'Snow Boots',
-    color: '#FF7FA8',
-    draw: ({ color }) =>
-      pair(
-        <g>
-          <path d="M 110 340 L 146 340 L 146 396 L 110 396 Z" fill={color} {...S} />
-          <path d={SHOE} fill={color} {...S} />
-          <path d={SOLE} fill={shade(color, -25)} {...S} />
-          <ellipse cx={128} cy={340} rx={22} ry={12} fill="#FFFFFF" {...S} />
-        </g>,
-      ),
-  },
-
-  {
-    id: 'sandals',
-    name: 'Sandals',
-    color: '#FF9E6D',
-    draw: ({ color }) =>
-      pair(
-        <g>
-          <path d="M 104 406 C 96 408 98 420 110 421 L 142 421 C 150 419 150 408 142 406 Z" fill={color} {...S} />
-          <path d="M 112 406 L 134 394" stroke={color} strokeWidth={8} strokeLinecap="round" />
-          <path d="M 124 406 L 142 396" stroke={color} strokeWidth={8} strokeLinecap="round" />
-          <path d={heartPath(130, 398, 9)} fill="#FF5C8A" stroke={OUTLINE} strokeWidth={3} />
-        </g>,
-      ),
-  },
-
-  {
-    id: 'flipflops',
-    name: 'Flip Flops',
+    id: 'fairy',
+    name: 'Leaf Slippers',
+    theme: 'fairy',
     color: '#5FD3A6',
     draw: ({ color }) =>
       pair(
         <g>
-          <path d="M 104 408 C 96 410 98 421 110 422 L 142 422 C 150 420 150 409 142 408 Z" fill={color} {...S} />
-          <path d="M 116 408 L 132 398 L 144 408" fill="none" stroke="#FFFFFF" strokeWidth={7} strokeLinecap="round" />
-          <circle cx={132} cy={398} r={5} fill="#FFD166" stroke={OUTLINE} strokeWidth={3} />
+          <path d={FLAT} fill={color} {...S} />
+          <path d="M 110 396 C 116 382 132 378 142 384 C 138 396 124 402 112 400 Z" fill={shade(color, 14)} {...S} strokeWidth={3.5} />
+          <path d="M 114 398 q 14 -10 26 -13" fill="none" stroke={shade(color, -22)} strokeWidth={3} />
+          <path d="M 108 388 q -8 -14 4 -22" fill="none" stroke={shade(color, -10)} strokeWidth={5} strokeLinecap="round" />
+          <circle cx={126} cy={410} r={4} fill="#FFF0A8" stroke={OUTLINE} strokeWidth={2.4} />
         </g>,
       ),
   },
 
   {
-    id: 'heels',
-    name: 'Party Heels',
-    color: '#F27CD0',
+    id: 'cat',
+    name: 'Paw Boots',
+    theme: 'cat',
+    color: '#3A3040',
     draw: ({ color }) =>
       pair(
         <g>
-          <path d="M 100 400 C 92 406 96 416 110 416 L 140 416 C 148 412 148 396 140 392 Z" fill={color} {...S} />
-          <path d="M 138 414 L 138 426 L 148 426 L 146 412 Z" fill={shade(color, -20)} {...S} />
-          <polygon points={starPoints(120, 400, 9)} fill="#FFF0A8" stroke={OUTLINE} strokeWidth={3} />
+          <Boot color={color} top={348} sole="#FF8FB1" />
+          <path d={paw(127, 372, 15)} fill="#FF8FB1" stroke={OUTLINE} strokeWidth={2.6} />
         </g>,
       ),
   },
 
   {
-    id: 'slippers',
-    name: 'Fluffy Slippers',
-    color: '#FFB3CB',
+    id: 'dog',
+    name: 'Puppy Boots',
+    theme: 'dog',
+    color: '#C98A5B',
     draw: ({ color }) =>
       pair(
         <g>
-          <path d="M 104 398 C 94 402 94 416 108 420 L 142 420 C 150 416 150 400 142 398 Z" fill={color} {...S} />
-          <circle cx={124} cy={394} r={13} fill={shade(color, 12)} {...S} />
-          <circle cx={140} cy={396} r={9} fill={shade(color, 12)} {...S} />
+          <Boot color={color} top={352} />
+          <ellipse cx={128} cy={352} rx={22} ry={11} fill="#F6E3CE" {...S} />
+          <path d={paw(127, 378, 13)} fill={shade(color, 24)} stroke={OUTLINE} strokeWidth={2.4} />
         </g>,
       ),
   },
 
   {
-    id: 'skates',
-    name: 'Roller Skates',
+    id: 'gothic',
+    name: 'Platform Boots',
+    theme: 'gothic',
+    color: '#2B2130',
+    draw: ({ color }) =>
+      pair(
+        <g>
+          <path d={shaft(310)} fill={color} {...S} />
+          <path d={SHOE} fill={color} {...S} />
+          <path d="M 104 406 C 94 408 94 424 108 426 L 144 426 C 150 424 150 408 144 406 Z" fill={shade(color, 22)} {...S} />
+          {[322, 342, 362, 382].map((y) => (
+            <g key={y} stroke="#A2437B" strokeWidth={3} strokeLinecap="round">
+              <path d={`M 114 ${y} L 142 ${y + 8}`} />
+              <path d={`M 142 ${y} L 114 ${y + 8}`} />
+            </g>
+          ))}
+        </g>,
+      ),
+  },
+
+  {
+    id: 'mermaid',
+    name: 'Shell Flats',
+    theme: 'mermaid',
+    color: '#45C4C0',
+    draw: ({ color }) =>
+      pair(
+        <g>
+          <path d={FLAT} fill={color} {...S} />
+          <path d={shell(127, 394, 16)} fill="#FF9FC4" stroke={OUTLINE} strokeWidth={3} strokeLinejoin="round" />
+          <path d="M 110 412 q 8 6 16 0 q 8 6 16 0" fill="none" stroke={shade(color, -20)} strokeWidth={3} />
+        </g>,
+      ),
+  },
+
+  {
+    id: 'unicorn',
+    name: 'Unicorn Boots',
+    theme: 'unicorn',
+    color: '#C79BFF',
+    draw: ({ color }) =>
+      pair(
+        <g>
+          <path d={shaft(342)} fill={color} {...S} />
+          <path d={SHOE} fill={color} {...S} />
+          <path d={SOLE} fill="#FFFFFF" {...S} />
+          {RAINBOW_BANDS.slice(0, 4).map((c, i) => (
+            <path key={c} d={`M 112 ${352 + i * 9} L 144 ${352 + i * 9}`} stroke={c} strokeWidth={6} strokeLinecap="round" />
+          ))}
+          <polygon points={starPoints(128, 392, 10)} fill="#FFD166" stroke={OUTLINE} strokeWidth={2.6} />
+        </g>,
+      ),
+  },
+
+  {
+    id: 'ballerina',
+    name: 'Pointe Shoes',
+    theme: 'ballerina',
+    color: '#FFC2D4',
+    draw: ({ color }) =>
+      pair(
+        <g>
+          <path d={FLAT} fill={color} {...S} />
+          <path d="M 116 340 L 122 396 M 140 340 L 134 396" stroke={color} strokeWidth={6} strokeLinecap="round" />
+          <path d="M 116 340 L 122 396 M 140 340 L 134 396" stroke={shade(color, -18)} strokeWidth={2} opacity={0.6} />
+          <path d="M 118 364 L 138 358" stroke={color} strokeWidth={6} strokeLinecap="round" />
+          <path d="M 120 396 q 8 -10 16 0" fill="none" stroke={shade(color, -18)} strokeWidth={3.5} />
+        </g>,
+      ),
+  },
+
+  {
+    id: 'hero',
+    name: 'Hero Boots',
+    theme: 'hero',
+    color: '#FF4F5A',
+    draw: ({ color }) =>
+      pair(
+        <g>
+          <path d={shaft(338)} fill={color} {...S} />
+          <path d={SHOE} fill={color} {...S} />
+          <path d={SOLE} fill="#4F8CFF" {...S} />
+          <path d="M 108 338 L 148 338 L 144 356 L 112 356 Z" fill="#4F8CFF" {...S} />
+          <path d={bolt(128, 382, 13)} fill="#FFD166" stroke={OUTLINE} strokeWidth={2.6} />
+        </g>,
+      ),
+  },
+
+  {
+    id: 'bunny',
+    name: 'Bunny Slippers',
+    theme: 'bunny',
     color: '#FFFFFF',
     draw: ({ color }) =>
       pair(
         <g>
-          <path d="M 110 348 L 146 348 L 146 396 L 110 396 Z" fill={color} {...S} />
-          <path d={SHOE} fill={color} {...S} />
-          <path d="M 102 414 L 148 414 L 148 422 L 102 422 Z" fill="#FF5C8A" {...S} />
-          <circle cx={112} cy={428} r={9} fill="#FFD166" {...S} />
-          <circle cx={140} cy={428} r={9} fill="#FFD166" {...S} />
-          <path d="M 114 356 l 20 4 M 114 366 l 20 4" stroke="#FF7FA8" strokeWidth={4.5} strokeLinecap="round" />
+          <path d="M 104 396 C 92 400 92 416 108 420 L 142 420 C 150 416 150 398 142 396 Z" fill={color} {...S} />
+          <ellipse cx={116} cy={378} rx={7} ry={16} fill={color} {...S} strokeWidth={4} />
+          <ellipse cx={134} cy={376} rx={7} ry={16} fill={color} {...S} strokeWidth={4} />
+          <ellipse cx={116} cy={379} rx={3} ry={10} fill="#FFB3CB" />
+          <ellipse cx={134} cy={377} rx={3} ry={10} fill="#FFB3CB" />
+          <circle cx={119} cy={404} r={3} fill={OUTLINE} />
+          <circle cx={133} cy={404} r={3} fill={OUTLINE} />
+          <path d="M 122 412 l 4 3 l 4 -3" fill="none" stroke="#FF8FB1" strokeWidth={3} strokeLinecap="round" />
         </g>,
       ),
   },
 
-  {
-    id: 'clogs',
-    name: 'Garden Clogs',
-    color: '#B8E986',
+  // Royal heels: one shape, six palettes and emblems.
+  ...PRINCESSES.map<Item>((p) => ({
+    id: `heels-${p.id}`,
+    name: `${p.name} Heels`,
+    theme: p.id,
+    color: p.color,
     draw: ({ color }) =>
       pair(
         <g>
-          <path d="M 104 392 C 94 398 94 414 108 420 L 142 420 C 150 414 150 392 142 392 Z" fill={color} {...S} />
-          <circle cx={116} cy={400} r={4} fill={shade(color, -22)} />
-          <circle cx={130} cy={398} r={4} fill={shade(color, -22)} />
-          <circle cx={124} cy={410} r={4} fill={shade(color, -22)} />
-          <path d="M 102 414 L 148 414" stroke={shade(color, -22)} strokeWidth={5} />
+          <path d="M 100 400 C 92 406 96 416 110 416 L 140 416 C 148 412 148 396 140 392 Z" fill={color} {...S} />
+          <path d="M 138 414 L 138 428 L 148 428 L 146 412 Z" fill={p.trim} {...S} />
+          <Motif kind={p.motif} x={120} y={400} r={11} color={p.gem} width={2.4} />
         </g>,
       ),
-  },
+  })),
 ];

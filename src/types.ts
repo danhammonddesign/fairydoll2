@@ -21,6 +21,8 @@ export interface DrawCtx {
 export interface Item {
   id: string;
   name: string;
+  /** Costume this piece belongs to; see data/themes.ts. */
+  theme?: string;
   /** Default colour, used until the player repaints it. */
   color: string;
   /** Drawn in front of the body. */

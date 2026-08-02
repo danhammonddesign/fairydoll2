@@ -4,22 +4,36 @@ A cute, mobile-first dress-up game for kids. Pick a doll, then mix and match
 hats, dresses, shirts, pants, shoes, accessories and makeup — and recolour any
 piece with a tap.
 
-## What's in the wardrobe
+## Costumes
+
+The wardrobe is built around **16 costumes**, and every category has a matching
+piece for each one — so a witch hat, witch dress and witch boots are all there
+to be found together.
+
+🧙‍♀️ Witch · 🧚 Fairy · 🐱 Cat · 🐶 Puppy · 🖤 Gothic · 🧜‍♀️ Mermaid ·
+🦄 Unicorn · 🩰 Ballerina · 🦸‍♀️ Superhero · 🐰 Bunny
+
+The princesses are a family of six that share one silhouette and differ by
+palette and emblem:
+👑 Pink · ❄️ Ice · 🔥 Fire · 🌈 Rainbow · 🌙 Midnight · 🌊 Ocean
+
+Each option button carries its costume's badge, so matching pieces are easy to
+spot without reading. Mixing costumes is entirely allowed.
 
 | Category | Options |
 | --- | --- |
 | 👧 Dolls | 12 characters, each with their own skin tone, hair style, hair colour and eye style |
-| 👑 Hats | 12 + "no hat" — crown, tiara, big bow, flower crown, beanie, sun hat, party hat, cat ears, bunny ears, star band, witch hat, cap, ear muffs |
-| 👗 Dresses | 12 + "no dress" — princess, ball gown, sundress, party, fairy, mermaid, polka, tutu, winter, rainbow, star, pinafore, kimono |
-| 👚 Shirts | 12 + "no shirt" — tee, heart tee, stripes, tank, crop, hoodie, sweater, bow blouse, sailor, cardigan, turtleneck, star top, ruffle |
-| 👖 Pants | 12 + "no pants" — jeans, leggings, star tights, joggers, capris, shorts, denim shorts, bell bottoms, skirt, pleated skirt, polka skirt, tutu, long skirt |
-| 👟 Shoes | 12 + bare feet — sneakers, ballet flats, mary janes, boots, star boots, rain boots, snow boots, sandals, flip flops, heels, slippers, roller skates, clogs |
-| 🧚 Extras | 12 + "nothing" — fairy/butterfly/angel wings, cat tail, backpack, necklace, pearls, glasses, magic wand, halo, scarf, purse, bow tie |
-| 💄 Makeup | 12 + natural — blush, rosy lips, eyeshadow, rainbow lids, winged liner, lashes, freckles, star cheeks, heart cheeks, gems, glitter, sparkle eyes, bold lips |
+| 👑 Hats | 16 + "no hat" — one per costume |
+| 👗 Dresses | 16 + "no dress" |
+| 👚 Shirts | 16 + "no shirt" |
+| 👖 Pants | 16 + "no pants" — skirts, tutus, leggings and shorts |
+| 👟 Shoes | 16 + bare feet |
+| 🧚 Extras | 16 + "nothing" — wings, tails, capes, wands, collars |
+| 💄 Makeup | 16 + natural — whiskers, masks, gems, themed lids and lips |
 
 Picking a dress puts away the shirt and pants, and picking a shirt or pants puts
-away the dress — the way a real dress-up box works. **Surprise!** rolls a random
-outfit and **Save** downloads the doll as a PNG.
+away the dress — the way a real dress-up box works. **Surprise!** dresses the
+doll head-to-toe in one random costume, and **Save** downloads her as a PNG.
 
 ## How the art works
 
@@ -34,7 +48,10 @@ Layers stack back-to-front in `src/components/DollSvg.tsx`:
 wings → back hair → body → face → makeup → clothes → shoes → front hair → hat →
 front accessories.
 
-- `src/art/` — shared palette, shape helpers, body and hair art
+- `src/art/` — palette, shape and motif helpers, body and hair art, and
+  `garments.tsx`: the shared sleeves, skirts, bodices and boots every costume
+  is assembled from
+- `src/data/themes.ts` — the 16 costumes and their palettes
 - `src/data/` — one file per wardrobe category
 - `src/App.tsx` — the kid-facing UI
 - `src/Showcase.tsx` — dev-only contact sheet of every item, at `/?showcase`

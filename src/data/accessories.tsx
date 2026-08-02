@@ -1,208 +1,226 @@
-import type { ReactNode } from 'react';
+import { S, pair } from '../art/garments';
+import { Motif } from '../art/motifs';
 import { OUTLINE, shade } from '../art/palette';
-import { heartPath, starPoints } from '../art/shapes';
+import { bat, bone, flower, shell, starPoints } from '../art/shapes';
 import type { Item } from '../types';
-
-const S = { stroke: OUTLINE, strokeWidth: 5, strokeLinejoin: 'round' as const };
-
-/** Mirror a left-side wing across the doll to make a matching pair. */
-function pair(art: ReactNode): ReactNode {
-  return (
-    <g>
-      {art}
-      <g transform="translate(300 0) scale(-1 1)">{art}</g>
-    </g>
-  );
-}
+import { PRINCESSES, RAINBOW_BANDS } from './themes';
 
 export const ACCESSORIES: Item[] = [
   { id: 'none', name: 'Nothing', color: '#FFB3CB' },
 
   {
-    id: 'fairywings',
+    id: 'witch',
+    name: 'Broomstick',
+    theme: 'witch',
+    color: '#C98A5B',
+    draw: ({ color }) => (
+      <g>
+        <path d="M 206 300 L 250 176" stroke={OUTLINE} strokeWidth={15} strokeLinecap="round" />
+        <path d="M 206 300 L 250 176" stroke={color} strokeWidth={9} strokeLinecap="round" />
+        <path d="M 196 336 L 216 276 L 244 286 L 224 346 Z" fill="#FFD166" {...S} />
+        <path d="M 200 322 L 238 334" stroke={shade('#FFD166', -28)} strokeWidth={5} />
+        <path d="M 206 344 L 200 366 M 216 348 L 214 370 M 226 348 L 230 368" stroke="#FFD166" strokeWidth={5} strokeLinecap="round" />
+        <path d="M 206 344 L 200 366 M 216 348 L 214 370 M 226 348 L 230 368" stroke={OUTLINE} strokeWidth={1.6} opacity={0.5} />
+      </g>
+    ),
+  },
+
+  {
+    id: 'fairy',
     name: 'Fairy Wings',
+    theme: 'fairy',
     color: '#B8E4FF',
     back: ({ color }) =>
       pair(
-        <g opacity={0.92}>
+        <g opacity={0.94}>
           <path d="M 122 194 C 84 138 26 148 36 200 C 44 240 98 236 124 208 Z" fill={color} {...S} />
           <path d="M 124 216 C 92 228 50 252 68 284 C 88 310 122 266 126 232 Z" fill={shade(color, 6)} {...S} />
           <path d="M 108 200 q -30 -14 -50 -4 M 108 232 q -22 6 -32 26" fill="none" stroke={shade(color, -22)} strokeWidth={3.5} />
+          <path d={flower(52, 190, 11)} fill="#FFB3CB" stroke={OUTLINE} strokeWidth={2.4} />
         </g>,
       ),
   },
 
   {
-    id: 'butterfly',
-    name: 'Butterfly Wings',
-    color: '#F27CD0',
-    back: ({ color }) =>
-      pair(
-        <g opacity={0.95}>
-          <circle cx={72} cy={186} r={50} fill={color} {...S} />
-          <circle cx={84} cy={256} r={38} fill={shade(color, 10)} {...S} />
-          <circle cx={64} cy={178} r={13} fill="#FFF0A8" stroke={OUTLINE} strokeWidth={3.5} />
-          <circle cx={88} cy={258} r={10} fill="#FFF0A8" stroke={OUTLINE} strokeWidth={3.5} />
-        </g>,
-      ),
+    id: 'cat',
+    name: 'Tail & Bell',
+    theme: 'cat',
+    color: '#3A3040',
+    back: ({ color }) => (
+      <g>
+        <path d="M 192 288 C 244 302 258 248 230 218" stroke={OUTLINE} strokeWidth={26} fill="none" strokeLinecap="round" />
+        <path d="M 192 288 C 244 302 258 248 230 218" stroke={color} strokeWidth={18} fill="none" strokeLinecap="round" />
+        <path d="M 234 224 l 10 8 M 250 252 l 12 2" stroke="#FF8FB1" strokeWidth={7} strokeLinecap="round" />
+      </g>
+    ),
+    draw: () => (
+      <g>
+        <path d="M 124 168 Q 150 190 176 168" fill="none" stroke="#FF8FB1" strokeWidth={9} strokeLinecap="round" />
+        <circle cx={150} cy={186} r={12} fill="#FFD166" {...S} />
+        <path d="M 144 188 L 156 188" stroke={OUTLINE} strokeWidth={3} strokeLinecap="round" />
+        <circle cx={150} cy={193} r={2.6} fill={OUTLINE} />
+      </g>
+    ),
   },
 
   {
-    id: 'angelwings',
-    name: 'Angel Wings',
-    color: '#FFFFFF',
+    id: 'dog',
+    name: 'Bone Collar',
+    theme: 'dog',
+    color: '#FF5C8A',
+    back: () => (
+      <g>
+        <path d="M 190 292 C 232 296 246 258 232 232" stroke={OUTLINE} strokeWidth={24} fill="none" strokeLinecap="round" />
+        <path d="M 190 292 C 232 296 246 258 232 232" stroke="#C98A5B" strokeWidth={16} fill="none" strokeLinecap="round" />
+        <ellipse cx={233} cy={230} rx={13} ry={11} fill="#F6E3CE" {...S} strokeWidth={4} />
+      </g>
+    ),
+    draw: ({ color }) => (
+      <g>
+        <path d="M 124 166 Q 150 190 176 166" fill="none" stroke={color} strokeWidth={11} strokeLinecap="round" />
+        <path d={bone(150, 188, 17)} fill="#FFFFFF" stroke={OUTLINE} strokeWidth={3} strokeLinejoin="round" />
+      </g>
+    ),
+  },
+
+  {
+    id: 'gothic',
+    name: 'Bat Wings',
+    theme: 'gothic',
+    color: '#2B2130',
     back: ({ color }) =>
       pair(
         <g>
           <path
-            d="M 124 200 C 96 150 40 140 34 184 C 22 196 34 216 48 218 C 34 236 48 262 68 258
-               C 66 282 92 292 106 274 C 118 262 124 232 124 200 Z"
+            d="M 124 196 C 96 150 40 142 30 178 L 58 190 L 34 216 L 68 214 L 50 250 L 88 236 L 82 274
+               C 106 262 122 232 124 196 Z"
             fill={color}
             {...S}
           />
-          <path d="M 100 198 q -30 -10 -54 -4 M 96 226 q -28 -4 -48 6 M 98 254 q -20 2 -30 12" fill="none" stroke={shade(color, -18)} strokeWidth={4} strokeLinecap="round" />
+          <path d="M 110 200 L 56 186 M 106 226 L 62 218 M 104 250 L 78 248" stroke="#A2437B" strokeWidth={3.5} strokeLinecap="round" />
         </g>,
       ),
   },
 
   {
-    id: 'cattail',
-    name: 'Cat Tail',
-    color: '#3A3040',
-    back: ({ color }) =>
-      <g>
-        <path d="M 192 288 C 244 302 258 248 230 218" stroke={OUTLINE} strokeWidth={26} fill="none" strokeLinecap="round" />
-        <path d="M 192 288 C 244 302 258 248 230 218" stroke={color} strokeWidth={18} fill="none" strokeLinecap="round" />
-        <path d="M 234 224 l 10 8 M 250 252 l 12 2" stroke="#FFFFFF" strokeWidth={7} strokeLinecap="round" />
-      </g>,
-  },
-
-  {
-    id: 'backpack',
-    name: 'Backpack',
-    color: '#5FD3A6',
-    back: ({ color }) => (
-      <path
-        d="M 80 196 C 80 172 220 172 220 196 C 226 244 224 288 216 306 L 84 306 C 76 288 74 244 80 196 Z"
-        fill={color}
-        {...S}
-      />
-    ),
-    draw: ({ color }) => (
-      <g>
-        <path d="M 122 176 C 112 214 112 254 116 290" fill="none" stroke={shade(color, -14)} strokeWidth={13} strokeLinecap="round" />
-        <path d="M 178 176 C 188 214 188 254 184 290" fill="none" stroke={shade(color, -14)} strokeWidth={13} strokeLinecap="round" />
-        <path d="M 116 236 L 184 236" stroke={shade(color, -14)} strokeWidth={9} strokeLinecap="round" />
-      </g>
-    ),
-  },
-
-  {
-    id: 'necklace',
-    name: 'Heart Necklace',
-    color: '#FFD166',
-    draw: ({ color }) => (
-      <g>
-        <path d="M 128 168 Q 150 202 172 168" fill="none" stroke={color} strokeWidth={5} strokeLinecap="round" />
-        <path d={heartPath(150, 196, 14)} fill="#FF5C8A" stroke={OUTLINE} strokeWidth={4} />
-      </g>
-    ),
-  },
-
-  {
-    id: 'pearls',
-    name: 'Pearls',
-    color: '#FFFFFF',
+    id: 'mermaid',
+    name: 'Pearl Shells',
+    theme: 'mermaid',
+    color: '#FF9FC4',
     draw: ({ color }) => (
       <g>
         {Array.from({ length: 9 }).map((_, i) => {
           const t = i / 8;
-          const x = 126 + t * 48;
-          const y = 168 + Math.sin(Math.PI * t) * 22;
-          return <circle key={i} cx={x} cy={y} r={6} fill={color} stroke={OUTLINE} strokeWidth={3} />;
+          const x = 124 + t * 52;
+          const y = 166 + Math.sin(Math.PI * t) * 24;
+          return <circle key={i} cx={x} cy={y} r={5.5} fill="#FFFFFF" stroke={OUTLINE} strokeWidth={2.6} />;
         })}
+        <path d={shell(150, 196, 17)} fill={color} stroke={OUTLINE} strokeWidth={3.2} strokeLinejoin="round" />
       </g>
     ),
   },
 
   {
-    id: 'glasses',
-    name: 'Glasses',
-    color: '#FF5C8A',
+    id: 'unicorn',
+    name: 'Rainbow Tail',
+    theme: 'unicorn',
+    color: '#C79BFF',
+    back: () => (
+      <g>
+        {RAINBOW_BANDS.map((c, i) => (
+          <path
+            key={c}
+            d={`M ${196 + i * 3} ${278} C ${240 + i * 4} ${296 + i * 6} ${248 + i * 4} ${340 + i * 6} ${228 + i * 3} ${372 + i * 5}`}
+            fill="none"
+            stroke={c}
+            strokeWidth={12}
+            strokeLinecap="round"
+          />
+        ))}
+      </g>
+    ),
+  },
+
+  {
+    id: 'ballerina',
+    name: 'Rose Bouquet',
+    theme: 'ballerina',
+    color: '#FF7FA8',
     draw: ({ color }) => (
       <g>
-        <circle cx={126} cy={108} r={22} fill="#FFFFFF" fillOpacity={0.35} stroke={color} strokeWidth={6} />
-        <circle cx={174} cy={108} r={22} fill="#FFFFFF" fillOpacity={0.35} stroke={color} strokeWidth={6} />
-        <path d="M 148 106 q 2 -6 4 0" fill="none" stroke={color} strokeWidth={6} strokeLinecap="round" />
-        <path d="M 104 104 L 96 100 M 196 104 L 204 100" stroke={color} strokeWidth={6} strokeLinecap="round" />
+        <path d="M 200 296 L 212 250" stroke="#7FCF8F" strokeWidth={7} strokeLinecap="round" />
+        <path d="M 206 274 q 14 -6 18 -18" fill="none" stroke="#7FCF8F" strokeWidth={6} strokeLinecap="round" />
+        <path d={flower(214, 234, 17)} fill={color} {...S} strokeWidth={4} />
+        <path d={flower(234, 248, 13)} fill={shade(color, 12)} {...S} strokeWidth={3.5} />
+        <circle cx={214} cy={234} r={6} fill="#FFF0A8" stroke={OUTLINE} strokeWidth={2.6} />
       </g>
     ),
   },
 
   {
-    id: 'wand',
-    name: 'Magic Wand',
-    color: '#FFD166',
+    id: 'hero',
+    name: 'Hero Cape',
+    theme: 'hero',
+    color: '#4F8CFF',
+    back: ({ color }) => (
+      <g>
+        <path
+          d="M 118 176 L 182 176 C 214 232 232 316 236 386 L 220 372 L 202 392 L 184 372 L 166 392
+             L 150 372 L 134 392 L 116 372 L 98 392 L 80 372 L 64 386 C 68 316 86 232 118 176 Z"
+          fill={color}
+          {...S}
+        />
+        <path d="M 118 176 Q 150 206 182 176" fill="none" stroke={shade(color, -20)} strokeWidth={6} />
+      </g>
+    ),
+  },
+
+  {
+    id: 'bunny',
+    name: 'Cottontail',
+    theme: 'bunny',
+    color: '#FFFFFF',
+    back: ({ color }) => (
+      <g>
+        <circle cx={216} cy={300} r={26} fill={color} {...S} />
+        <circle cx={234} cy={282} r={16} fill={color} {...S} />
+        <circle cx={238} cy={310} r={14} fill={color} {...S} />
+        <circle cx={216} cy={300} r={26} fill={color} />
+        <circle cx={210} cy={294} r={7} fill="#FFB3CB" opacity={0.5} />
+      </g>
+    ),
+  },
+
+  {
+    id: 'batclip',
+    name: 'Bat Swarm',
+    theme: 'gothic',
+    color: '#2B2130',
+    back: ({ color }) => (
+      <g>
+        <path d={bat(58, 168, 26)} fill={color} {...S} strokeWidth={3.5} />
+        <path d={bat(38, 240, 18)} fill={color} {...S} strokeWidth={3} />
+        <path d={bat(244, 196, 22)} fill={color} {...S} strokeWidth={3.2} />
+        <path d={bat(262, 264, 15)} fill={color} {...S} strokeWidth={3} />
+      </g>
+    ),
+  },
+
+  // Royal wands: one shape, six palettes and emblems.
+  ...PRINCESSES.map<Item>((p) => ({
+    id: `wand-${p.id}`,
+    name: `${p.name} Wand`,
+    theme: p.id,
+    color: p.trim,
     draw: ({ color }) => (
       <g>
         <path d="M 200 296 L 244 208" stroke={OUTLINE} strokeWidth={13} strokeLinecap="round" />
-        <path d="M 200 296 L 244 208" stroke="#FFFFFF" strokeWidth={7} strokeLinecap="round" />
-        <polygon points={starPoints(248, 198, 26)} fill={color} {...S} />
-        <polygon points={starPoints(224, 168, 10)} fill="#FFFFFF" stroke={OUTLINE} strokeWidth={3} />
-        <polygon points={starPoints(272, 232, 9)} fill="#FFFFFF" stroke={OUTLINE} strokeWidth={3} />
+        <path d="M 200 296 L 244 208" stroke={color} strokeWidth={7} strokeLinecap="round" />
+        <circle cx={248} cy={198} r={25} fill={p.color} {...S} />
+        <Motif kind={p.motif} x={248} y={198} r={16} color={p.gem} width={2.6} />
+        <polygon points={starPoints(222, 164, 9)} fill={color} stroke={OUTLINE} strokeWidth={2.4} />
+        <polygon points={starPoints(276, 230, 8)} fill={color} stroke={OUTLINE} strokeWidth={2.4} />
       </g>
     ),
-  },
-
-  {
-    id: 'halo',
-    name: 'Halo',
-    color: '#FFF0A8',
-    draw: ({ color }) => (
-      <g>
-        <ellipse cx={150} cy={16} rx={38} ry={11} fill="none" stroke={OUTLINE} strokeWidth={13} />
-        <ellipse cx={150} cy={16} rx={38} ry={11} fill="none" stroke={color} strokeWidth={7} />
-      </g>
-    ),
-  },
-
-  {
-    id: 'scarf',
-    name: 'Cozy Scarf',
-    color: '#FF6F91',
-    draw: ({ color }) => (
-      <g>
-        <path d="M 164 180 L 190 254 L 164 262 L 148 190 Z" fill={shade(color, 8)} {...S} />
-        <path d="M 120 162 Q 150 190 180 162 L 184 184 Q 150 214 116 184 Z" fill={color} {...S} />
-        <path d="M 168 210 L 186 206 M 172 232 L 190 228" stroke={shade(color, -18)} strokeWidth={4} strokeLinecap="round" />
-      </g>
-    ),
-  },
-
-  {
-    id: 'purse',
-    name: 'Little Purse',
-    color: '#B98CFF',
-    draw: ({ color }) => (
-      <g>
-        <path d="M 124 178 C 140 214 166 240 186 252" fill="none" stroke={shade(color, -14)} strokeWidth={7} />
-        <path d="M 172 250 L 210 250 C 214 268 214 282 210 290 L 172 290 C 168 282 168 268 172 250 Z" fill={color} {...S} />
-        <path d="M 180 250 q 11 -16 22 0" fill="none" stroke={shade(color, -20)} strokeWidth={5} />
-        <circle cx={191} cy={270} r={7} fill="#FFF0A8" stroke={OUTLINE} strokeWidth={3.5} />
-      </g>
-    ),
-  },
-
-  {
-    id: 'bowtie',
-    name: 'Bow Tie',
-    color: '#FF5C8A',
-    draw: ({ color }) => (
-      <g>
-        <path d="M 144 172 C 118 156 102 168 110 186 C 118 200 138 190 146 180 Z" fill={color} {...S} />
-        <path d="M 156 172 C 182 156 198 168 190 186 C 182 200 162 190 154 180 Z" fill={color} {...S} />
-        <circle cx={150} cy={177} r={11} fill={shade(color, -14)} {...S} />
-      </g>
-    ),
-  },
+  })),
 ];

@@ -7,8 +7,10 @@ import { DRESSES } from './dresses';
 import { ACCESSORIES } from './accessories';
 import { MAKEUP } from './makeup';
 import { SHOES } from './shoes';
+import { THEMES } from './themes';
 
-export { DOLLS, HATS, SHIRTS, PANTS, DRESSES, ACCESSORIES, MAKEUP, SHOES };
+export { DOLLS, HATS, SHIRTS, PANTS, DRESSES, ACCESSORIES, MAKEUP, SHOES, THEMES };
+export { themeOf } from './themes';
 
 export interface Category {
   id: CategoryId;
@@ -29,7 +31,7 @@ export const CATEGORIES: Category[] = [
   { id: 'shirt', label: 'Shirts', emoji: '👚', items: SHIRTS, thumb: '72 150 156 160' },
   { id: 'pants', label: 'Pants', emoji: '👖', items: PANTS, thumb: '64 232 172 160' },
   { id: 'shoes', label: 'Shoes', emoji: '👟', items: SHOES, thumb: '84 330 132 116' },
-  { id: 'accessory', label: 'Extras', emoji: '🧚', items: ACCESSORIES, thumb: '10 60 280 270' },
+  { id: 'accessory', label: 'Extras', emoji: '🧚', items: ACCESSORIES, thumb: '4 44 292 348' },
   { id: 'makeup', label: 'Makeup', emoji: '💄', items: MAKEUP, thumb: '94 56 112 112' },
 ];
 
@@ -50,42 +52,54 @@ export function findItem(cat: CategoryId, id: string): Item | undefined {
 
 export const DEFAULT_OUTFIT: Outfit = {
   doll: 'lily',
-  hat: 'bow',
+  hat: 'crown-pinkP',
   shirt: 'none',
   pants: 'none',
-  dress: 'princess',
-  accessory: 'fairywings',
-  makeup: 'blush',
-  shoes: 'flats',
+  dress: 'gown-pinkP',
+  accessory: 'wand-pinkP',
+  makeup: 'face-pinkP',
+  shoes: 'heels-pinkP',
   colors: {
     doll: '#FF9FC4',
-    hat: '#FF7FA8',
+    hat: '#FFD166',
     shirt: '#6EC6FF',
     pants: '#FF7FA8',
     dress: '#FF9FC4',
-    accessory: '#B8E4FF',
-    makeup: '#FF7FA8',
+    accessory: '#FFD166',
+    makeup: '#FF9FC4',
     shoes: '#FF9FC4',
   },
 };
 
-/** Picks a random dress-up, biased away from the "none" options. */
+const WEARABLE: CategoryId[] = ['hat', 'accessory', 'makeup', 'shoes'];
+
+/**
+ * Dresses the doll head-to-toe in one costume — that is the whole point of
+ * the themes. Falls back to any item in a category the theme doesn't cover.
+ */
 export function randomOutfit(current: Outfit): Outfit {
+  const theme = THEMES[Math.floor(Math.random() * THEMES.length)];
+
   const pick = (cat: CategoryId) => {
-    const list = ITEMS[cat].filter((i) => i.id !== 'none');
+    const themed = ITEMS[cat].filter((i) => i.theme === theme.id);
+    const list = themed.length ? themed : ITEMS[cat].filter((i) => i.id !== 'none');
     return list[Math.floor(Math.random() * list.length)];
   };
 
-  const wearDress = Math.random() < 0.5;
   const next: Outfit = { ...current, colors: { ...current.colors } };
 
-  (['doll', 'hat', 'accessory', 'makeup', 'shoes'] as CategoryId[]).forEach((cat) => {
+  const doll = DOLLS[Math.floor(Math.random() * DOLLS.length)];
+  next.doll = doll.id;
+  next.colors.doll = doll.hair;
+
+  WEARABLE.forEach((cat) => {
     const item = pick(cat);
     next[cat as keyof Omit<Outfit, 'colors'>] = item.id;
     next.colors[cat] = item.color;
   });
 
-  if (wearDress) {
+  // Half the time wear the costume's dress, half the time its top and bottom.
+  if (Math.random() < 0.5) {
     const d = pick('dress');
     next.dress = d.id;
     next.colors.dress = d.color;
