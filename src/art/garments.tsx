@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { ARM_L, ARM_R, LEG_L, LEG_R } from './body';
+import { ARM_L, ARM_R } from './body';
 import { OUTLINE, shade } from './palette';
 
 // Garment primitives. Every costume is assembled from these, which is what
@@ -111,9 +111,14 @@ export const bell = (bottom: number, w: number) =>
 const SHORT_L = 'M 130 280 C 127 302 126 318 127 332';
 const SHORT_R = 'M 170 280 C 173 302 174 318 173 332';
 
+// Trousers stop at the ankle rather than the sole, so the shoe underneath
+// stays visible now that shoes are drawn behind the clothes.
+const ANKLE_L = 'M 130 272 C 126 310 126 348 128 374';
+const ANKLE_R = 'M 170 272 C 174 310 174 348 172 374';
+
 export function Legs({ color, width = 34, short = false }: { color: string; width?: number; short?: boolean }) {
-  const l = short ? SHORT_L : LEG_L;
-  const r = short ? SHORT_R : LEG_R;
+  const l = short ? SHORT_L : ANKLE_L;
+  const r = short ? SHORT_R : ANKLE_R;
   return (
     <g>
       <path d={l} stroke={OUTLINE} strokeWidth={width + 8} strokeLinecap="round" fill="none" />
@@ -136,6 +141,19 @@ export function Sash({ color }: { color: string }) {
 export function Waistband({ color }: { color: string }) {
   return <path d="M 112 250 L 188 250 L 190 268 L 110 268 Z" fill={color} {...S} />;
 }
+
+/**
+ * A scalloped trim hugging the bottom of a `bell` skirt. `half` is the hem's
+ * half-width, which for bell(bottom, w) is always 46 + w.
+ */
+export const scallopBand = (bottom: number, half: number, n = 4, h = 16) => {
+  const topHalf = half - 9;
+  const step = (2 * topHalf) / n;
+  let d = `M ${150 - topHalf} ${bottom - h} `;
+  for (let i = 0; i < n; i++) d += `q ${(step / 2).toFixed(1)} 20 ${step.toFixed(1)} 0 `;
+  d += `L ${150 + half} ${bottom} q ${-half} 22 ${-2 * half} 0 Z`;
+  return d;
+};
 
 /** Torn, pointed hem — witches and fairies. */
 export const raggedHem = (bottom: number, w: number, teeth = 6) => {

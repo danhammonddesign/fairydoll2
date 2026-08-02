@@ -12,7 +12,7 @@ interface Props {
 
 /**
  * Draws the whole doll. Every category is one layer, stacked back to front:
- * wings → hair → body → face → makeup → clothes → shoes → hair → hat → extras.
+ * wings → hair → body → face → makeup → shoes → clothes → hair → hat → extras.
  */
 export const DollSvg = forwardRef<SVGSVGElement, Props>(function DollSvg(
   { outfit, viewBox = STAGE, className },
@@ -51,11 +51,14 @@ export const DollSvg = forwardRef<SVGSVGElement, Props>(function DollSvg(
         <Face doll={doll} />
         {layer('makeup')}
 
+        {/* Shoes go on before the clothes, so hems drape over them instead of
+            skates and heels floating on top of a gown. Every hem stops above
+            the ankle, which keeps the shoes in view. */}
+        {layer('shoes')}
+
         {!wearingDress && layer('pants')}
         {!wearingDress && layer('shirt')}
         {wearingDress && layer('dress')}
-
-        {layer('shoes')}
 
         {hair.front(doll.hair)}
         {layer('hat')}

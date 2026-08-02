@@ -5,6 +5,10 @@ import { bolt, paw, starPoints } from '../art/shapes';
 import type { Item } from '../types';
 import { PRINCESSES, RAINBOW_BANDS } from './themes';
 
+/** Fitted scale skirt, wide enough to hide the legs behind it. */
+const SCALE_SKIRT =
+  'M 112 250 L 188 250 C 200 296 196 334 192 358 Q 150 372 108 358 C 104 334 100 296 112 250 Z';
+
 export const PANTS: Item[] = [
   { id: 'none', name: 'No Pants', color: '#FFB3CB' },
 
@@ -104,22 +108,25 @@ export const PANTS: Item[] = [
     color: '#45C4C0',
     draw: ({ color }) => (
       <g>
-        <path
-          d="M 114 250 L 186 250 C 190 296 186 330 182 352 Q 150 366 118 352 C 114 330 110 296 114 250 Z"
-          fill={color}
-          {...S}
-        />
-        {[276, 300, 324].map((y, r) =>
-          [0, 1, 2, 3].map((c) => (
-            <path
-              key={`${y}-${c}`}
-              d={`M ${124 + c * 18 + (r % 2) * 9} ${y} a 9 9 0 0 1 18 0`}
-              fill="none"
-              stroke={shade(color, -20)}
-              strokeWidth={3.5}
-            />
-          )),
-        )}
+        {/* Wide enough to hide the legs (they span x 107-193). */}
+        <clipPath id="clip-scale-skirt">
+          <path d={SCALE_SKIRT} />
+        </clipPath>
+        <path d={SCALE_SKIRT} fill={color} {...S} />
+        <g clipPath="url(#clip-scale-skirt)">
+          {[280, 304, 328].map((y, r) =>
+            [0, 1, 2, 3, 4].map((c) => (
+              <path
+                key={`${y}-${c}`}
+                d={`M ${106 + c * 18 + (r % 2) * 9} ${y} a 9 9 0 0 1 18 0`}
+                fill="none"
+                stroke={shade(color, -20)}
+                strokeWidth={3.5}
+              />
+            )),
+          )}
+        </g>
+        <path d={SCALE_SKIRT} fill="none" {...S} />
         <Waistband color="#FF9FC4" />
       </g>
     ),

@@ -9,12 +9,18 @@ import {
   Sash,
   bell,
   raggedHem,
+  scallopBand,
 } from '../art/garments';
 import { Motif } from '../art/motifs';
 import { OUTLINE, shade } from '../art/palette';
 import { bolt, heartPath, paw, shell, starPoints } from '../art/shapes';
 import type { Item } from '../types';
 import { PRINCESSES, RAINBOW_BANDS } from './themes';
+
+/** Fitted to the knee, then a tail fin. Wide enough to hide the legs. */
+const MERMAID_GOWN =
+  'M 118 238 L 182 238 C 200 270 198 320 194 348 C 218 356 226 372 228 382 ' +
+  'Q 150 390 72 382 C 74 372 82 356 106 348 C 102 320 100 270 118 238 Z';
 
 export const DRESSES: Item[] = [
   { id: 'none', name: 'No Dress', color: '#FFB3CB' },
@@ -27,14 +33,14 @@ export const DRESSES: Item[] = [
     draw: ({ color }) => (
       <g>
         <BellSleeves color={color} />
-        <path d={raggedHem(384, 34, 7)} fill={color} {...S} />
+        <path d={raggedHem(354, 34, 7)} fill={color} {...S} />
         <path d={BODICE} fill={shade(color, -8)} {...S} />
         <Sash color="#FFD166" />
         <path d="M 138 240 L 162 240 L 162 254 L 138 254 Z" fill={shade('#FFD166', -22)} {...S} strokeWidth={3.5} />
         {[
-          [116, 300, 13],
-          [186, 322, 11],
-          [150, 350, 15],
+          [116, 288, 13],
+          [186, 308, 11],
+          [150, 330, 15],
         ].map(([x, y, r], i) => (
           <polygon key={i} points={starPoints(x, y, r)} fill="#FFD166" stroke={OUTLINE} strokeWidth={3} />
         ))}
@@ -122,7 +128,7 @@ export const DRESSES: Item[] = [
     draw: ({ color }) => (
       <g>
         <BellSleeves color={shade(color, 8)} />
-        <path d={bell(400, 40)} fill={color} {...S} />
+        <path d={bell(362, 40)} fill={color} {...S} />
         <path d={BODICE} fill={shade(color, 8)} {...S} />
         <path d="M 128 182 L 172 182 L 174 240 L 126 240 Z" fill={shade(color, 18)} {...S} />
         {[196, 214].map((y) => (
@@ -132,11 +138,7 @@ export const DRESSES: Item[] = [
           </g>
         ))}
         <Sash color="#A2437B" />
-        <path
-          d="M 66 386 q 24 20 48 2 q 24 20 48 2 q 24 20 48 -4 l 4 16 q -76 24 -152 0 Z"
-          fill="#A2437B"
-          {...S}
-        />
+        <path d={scallopBand(362, 86)} fill="#A2437B" {...S} />
       </g>
     ),
   },
@@ -148,24 +150,27 @@ export const DRESSES: Item[] = [
     color: '#45C4C0',
     draw: ({ color }) => (
       <g>
-        <path
-          d="M 118 238 L 182 238 C 186 290 182 336 178 362 C 206 374 214 396 216 414 Q 150 430 84 414
-             C 86 396 94 374 122 362 C 118 336 114 290 118 238 Z"
-          fill={color}
-          {...S}
-        />
+        {/* Wide enough to hide the legs (they span x 107-193), flaring into a
+            tail fin that stops above the shoes. */}
+        <clipPath id="clip-mermaid-gown">
+          <path d={MERMAID_GOWN} />
+        </clipPath>
+        <path d={MERMAID_GOWN} fill={color} {...S} />
+        <g clipPath="url(#clip-mermaid-gown)">
+          {[268, 292, 316, 340].map((y, r) =>
+            [0, 1, 2, 3, 4].map((c) => (
+              <path
+                key={`${y}-${c}`}
+                d={`M ${106 + c * 22 + (r % 2) * 11} ${y} a 11 11 0 0 1 22 0`}
+                fill="none"
+                stroke={shade(color, -20)}
+                strokeWidth={3.5}
+              />
+            )),
+          )}
+        </g>
+        <path d={MERMAID_GOWN} fill="none" {...S} />
         <path d={BODICE_STRAP} fill={shade(color, 10)} {...S} />
-        {[268, 292, 316, 340].map((y, r) =>
-          [0, 1, 2].map((c) => (
-            <path
-              key={`${y}-${c}`}
-              d={`M ${128 + c * 22 + (r % 2) * 11} ${y} a 11 11 0 0 1 22 0`}
-              fill="none"
-              stroke={shade(color, -20)}
-              strokeWidth={3.5}
-            />
-          )),
-        )}
         <path d={shell(150, 224, 20)} fill="#FF9FC4" stroke={OUTLINE} strokeWidth={3.5} strokeLinejoin="round" />
         <Sash color="#FF9FC4" />
       </g>
@@ -271,21 +276,17 @@ export const DRESSES: Item[] = [
     draw: ({ color }) => (
       <g>
         <PuffSleeves color={shade(color, 12)} />
-        <path d={bell(416, 46)} fill={color} {...S} />
+        <path d={bell(360, 46)} fill={color} {...S} />
         <path d={BODICE} fill={shade(color, 8)} {...S} />
         <path d="M 126 174 Q 150 198 174 174" fill="none" stroke={p.trim} strokeWidth={8} strokeLinecap="round" />
         <Sash color={p.trim} />
-        <path
-          d="M 68 398 q 24 20 48 2 q 24 20 48 2 q 24 20 48 -4 l 4 16 q -76 24 -152 0 Z"
-          fill={p.trim}
-          {...S}
-        />
-        <path d="M 150 254 C 116 302 100 358 92 404" fill="none" stroke={shade(color, -14)} strokeWidth={5} />
-        <path d="M 150 254 C 184 302 200 358 208 404" fill="none" stroke={shade(color, -14)} strokeWidth={5} />
+        <path d={scallopBand(360, 92)} fill={p.trim} {...S} />
+        <path d="M 150 254 C 118 292 104 328 96 352" fill="none" stroke={shade(color, -14)} strokeWidth={5} />
+        <path d="M 150 254 C 182 292 196 328 204 352" fill="none" stroke={shade(color, -14)} strokeWidth={5} />
         <Motif kind={p.motif} x={150} y={218} r={22} color={p.gem} />
-        <Motif kind={p.motif} x={116} y={330} r={13} color={p.gem} />
-        <Motif kind={p.motif} x={186} y={352} r={11} color={p.gem} />
-        {p.motif === 'heart' && <path d={heartPath(150, 300, 12)} fill={p.trim} stroke={OUTLINE} strokeWidth={3} />}
+        <Motif kind={p.motif} x={112} y={306} r={13} color={p.gem} />
+        <Motif kind={p.motif} x={188} y={326} r={11} color={p.gem} />
+        {p.motif === 'heart' && <path d={heartPath(150, 292, 12)} fill={p.trim} stroke={OUTLINE} strokeWidth={3} />}
       </g>
     ),
   })),
