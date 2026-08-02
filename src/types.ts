@@ -1,37 +1,52 @@
-export type FairyState = {
-  skinColor: string;
-  hairStyle: number;
-  hairColor: string;
-  eyeStyle: number;
-  eyeColor: string;
-  topStyle: number;
-  topColor: string;
-  bottomStyle: number;
-  bottomColor: string;
-  shoeStyle: number;
-  shoeColor: string;
-  wingStyle: number;
-  wingColor: string;
-  wandStyle: number;
-  wandColor: string;
-  background: string;
-};
+import type { ReactNode } from 'react';
 
-export const INITIAL_STATE: FairyState = {
-  skinColor: "#FFE4E1",
-  hairStyle: 0,
-  hairColor: "#FFB7C5",
-  eyeStyle: 0,
-  eyeColor: "#4A90E2",
-  topStyle: 0,
-  topColor: "#FFFFFF",
-  bottomStyle: 0,
-  bottomColor: "#FFFFFF",
-  shoeStyle: 0,
-  shoeColor: "#FFFFFF",
-  wingStyle: 0,
-  wingColor: "#E0F7FA",
-  wandStyle: 0,
-  wandColor: "#FFD700",
-  background: "#FCE4EC",
-};
+export type CategoryId =
+  | 'doll'
+  | 'hat'
+  | 'shirt'
+  | 'pants'
+  | 'dress'
+  | 'accessory'
+  | 'makeup'
+  | 'shoes';
+
+/** Everything a drawing function is allowed to know about the doll. */
+export interface DrawCtx {
+  /** The colour the player picked for this category. */
+  color: string;
+  skin: string;
+  hair: string;
+}
+
+export interface Item {
+  id: string;
+  name: string;
+  /** Default colour, used until the player repaints it. */
+  color: string;
+  /** Drawn in front of the body. */
+  draw?: (ctx: DrawCtx) => ReactNode;
+  /** Drawn behind the body (wings, tails, backpacks). */
+  back?: (ctx: DrawCtx) => ReactNode;
+}
+
+export interface Doll {
+  id: string;
+  name: string;
+  skin: string;
+  hair: string;
+  hairStyle: string;
+  eye: string;
+  eyeStyle: 'round' | 'sparkle' | 'happy' | 'cat';
+}
+
+export interface Outfit {
+  doll: string;
+  hat: string;
+  shirt: string;
+  pants: string;
+  dress: string;
+  accessory: string;
+  makeup: string;
+  shoes: string;
+  colors: Record<CategoryId, string>;
+}
